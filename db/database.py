@@ -27,6 +27,8 @@ def _create_product_cards_table(db: sqlite3.Connection) -> None:
     )
     ''')
 
+
+
 def _insert_to_users(db: sqlite3.Connection, email: str, phone: str, created_at: str) -> int:
     db.cursor().execute('INSERT INTO users (email, phone, created_at) VALUES (?, ?, ?)',
                (email, phone, created_at))
