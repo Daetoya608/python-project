@@ -3,6 +3,7 @@ from app.models.buyer import Buyer
 from app.models.extra_models import Shopping_cart
 from app.models.product_card import ProductCard
 
+
 registered_sellers: list[Seller] = []
 registered_buyers: list[Buyer] = []
 

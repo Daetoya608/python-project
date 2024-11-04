@@ -1,6 +1,5 @@
-from base_account import BaseAccount
-from product_card import ProductCard
-
+from app.models.base_account import BaseAccount
+from app.models.product_card import ProductCard
 
 class Seller(BaseAccount):
     def __init__(self, email: str, phone_num: str, store_name: str, product_cards_list: list[ProductCard] = list()):

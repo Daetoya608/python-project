@@ -1,6 +1,6 @@
 import app.utils.helper as h
 from db.database import add_product_card
-from extra_models import Feedback
+from app.models.feedback import Feedback
 
 new_product_card_id: int = 0
 

@@ -1,6 +1,7 @@
-from extra_models import Shopping_cart, Bought_products
-from base_account import BaseAccount
-from product_card import ProductCard
+from app.models.feedback import Feedback
+from app.models.extra_models import Shopping_cart, Bought_products
+from app.models.base_account import BaseAccount
+from app.models.product_card import ProductCard
 
 
 class Buyer(BaseAccount):
@@ -21,4 +22,6 @@ class Buyer(BaseAccount):
     def buy_product(self, product_card: ProductCard):
         self.bought_products.bought_products.append(product_card)
 
-    def leave_feedback(self, product_card: ProductCard, ):
+    def leave_feedback(self, product_card: ProductCard, feedback: Feedback):
+        product_card.feedbacks.append(feedback)
+

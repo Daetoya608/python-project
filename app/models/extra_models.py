@@ -1,10 +1,4 @@
-from product_card import ProductCard
-
-class Feedback:
-    def __init__(self, buyer_id: int, rating: int, comment: str = ""):
-        self.buyer_id: int = buyer_id
-        self.rating: int = rating
-        self.comment: str = comment
+from app.models.product_card import ProductCard
 
 
 class Shopping_cart:
@@ -17,3 +11,4 @@ class Shopping_cart:
 class Bought_products:
     def __init__(self, bought_products: list[ProductCard] = []):
         self.bought_products: list[ProductCard] = bought_products
+
