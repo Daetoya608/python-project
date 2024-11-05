@@ -14,6 +14,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import app.services.registration as reg
 from PyQt5.QtWidgets import QMessageBox
 
+from gui.seller_mode_window import Ui_SellerModeWindow
+import mainwindow
+
+def go_to_seller_mode(name: str, email: str, tel_num: str):
+    # global ui
+    # global MainWindow
+    mainwindow.ui = Ui_SellerModeWindow()
+    mainwindow.ui.setupUi(mainwindow.MainWindow, name, email, tel_num)
+    mainwindow.MainWindow.show()
+
 
 def is_correct_input_data(is_seller: bool, is_buyer: bool, email: str, tel_num: str, name: str):
     check1 = not email.isspace() and not tel_num.isspace() and not name.isspace()
@@ -144,7 +154,16 @@ class Ui_RegistrationWindow(object):
         if is_seller:
             print("Добавлен аккаунт продавца")
             reg.register_seller(email, tel_number, name)
+            go_to_seller_mode(name, email, tel_number)
         elif is_buyer:
             print("Добавлен аккаунт покупателя")
             reg.register_buyer(email, tel_number, name)
+            go_to_seller_mode(name, email, tel_number)
 
+
+# def go_to_registration():
+#     global ui
+#     global MainWindow
+#     ui = Ui_RegistrationWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()

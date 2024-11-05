@@ -15,17 +15,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from gui.registration_process_window import Ui_RegistrationWindow
-
-ui: object
-MainWindow: QtWidgets.QMainWindow
+import mainwindow
 
 def go_to_registration():
-    global ui
-    global MainWindow
-    ui = Ui_RegistrationWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-
+    # global ui
+    # global MainWindow
+    mainwindow.ui = Ui_RegistrationWindow()
+    mainwindow.ui.setupUi(mainwindow.MainWindow)
+    mainwindow.MainWindow.show()
 
 
 class Ui_WelcomeWindow(object):
@@ -100,12 +97,21 @@ class Ui_WelcomeWindow(object):
 
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_WelcomeWindow()
-    #ui = Ui_RegistrationWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_WelcomeWindow()
+#     #ui = Ui_RegistrationWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec_())
+
+import sys
+app = QtWidgets.QApplication(sys.argv)
+mainwindow.MainWindow = QtWidgets.QMainWindow()
+mainwindow.ui = Ui_WelcomeWindow()
+#ui = Ui_RegistrationWindow()
+mainwindow.ui.setupUi(mainwindow.MainWindow)
+mainwindow.MainWindow.show()
+sys.exit(app.exec_())

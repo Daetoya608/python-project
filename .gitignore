@@ -5,3 +5,4 @@ app/services/__pycache__/
 app/utils/__pycache__/
 db/__pycache__/
 myvenv
+gui/__pycache__/
