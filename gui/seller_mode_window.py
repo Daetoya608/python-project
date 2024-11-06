@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import mainwindow
+import gui_utils
 # from gui.welcome_window import Ui_WelcomeWindow
 
 
@@ -131,13 +132,14 @@ class Ui_SellerModeWindow(object):
         # self.label_TELNUM.setText(_translate("MainWindow", "%tel. num:%"))
 
     def handle_home(self):
-        pass
+        #pass
         # mainwindow.ui = Ui_SellerModeWindow()
         # mainwindow.ui.setupUi(mainwindow.MainWindow, self.label_NAME, self.label_EMAIL, self.label_TELNUM)
         # mainwindow.MainWindow.show()
+        gui_utils.change_window(Ui_SellerModeWindow(), self.label_NAME.text(), self.label_EMAIL.text(),
+                                self.label_TELNUM.text())
+
 
     def handle_exit(self):
-        pass
-        # mainwindow.ui = Ui_WelcomeWindow()
-        # mainwindow.ui.setupUi(mainwindow.MainWindow)
-        # mainwindow.MainWindow.show()
+        from welcome_window import Ui_WelcomeWindow
+        gui_utils.change_window(Ui_WelcomeWindow())

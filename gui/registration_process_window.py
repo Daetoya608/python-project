@@ -14,15 +14,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import app.services.registration as reg
 from PyQt5.QtWidgets import QMessageBox
 
-from gui.seller_mode_window import Ui_SellerModeWindow
+#from gui.seller_mode_window import Ui_SellerModeWindow
 import mainwindow
+import gui_utils
+from gui.gui_utils import change_window
 
-def go_to_seller_mode(name: str, email: str, tel_num: str):
-    # global ui
-    # global MainWindow
-    mainwindow.ui = Ui_SellerModeWindow()
-    mainwindow.ui.setupUi(mainwindow.MainWindow, name, email, tel_num)
-    mainwindow.MainWindow.show()
+
+# def go_to_seller_mode(name: str, email: str, tel_num: str):
+#     # global ui
+#     # global MainWindow
+#     mainwindow.ui = Ui_SellerModeWindow()
+#     mainwindow.ui.setupUi(mainwindow.MainWindow, name, email, tel_num)
+#     mainwindow.MainWindow.show()
 
 
 def is_correct_input_data(is_seller: bool, is_buyer: bool, email: str, tel_num: str, name: str):
@@ -52,7 +55,7 @@ class Ui_RegistrationWindow(object):
         self.text_label_registration.setAlignment(QtCore.Qt.AlignCenter)
         self.text_label_registration.setObjectName("text_label_registration")
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(40, 90, 160, 131))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(40, 70, 160, 131))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -71,7 +74,7 @@ class Ui_RegistrationWindow(object):
         self.verticalLayout.addWidget(self.radioButton_is_seller)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 250, 311, 61))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 210, 311, 61))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -83,7 +86,7 @@ class Ui_RegistrationWindow(object):
         self.lineEdit_email.setObjectName("lineEdit_email")
         self.horizontalLayout.addWidget(self.lineEdit_email)
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(40, 330, 311, 51))
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(40, 280, 311, 51))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -95,7 +98,7 @@ class Ui_RegistrationWindow(object):
         self.lineEdit_tel_number.setObjectName("lineEdit_tel_number")
         self.horizontalLayout_2.addWidget(self.lineEdit_tel_number)
         self.verticalLayoutWidget_3 = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(40, 410, 311, 80))
+        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(40, 350, 311, 80))
         self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -107,14 +110,26 @@ class Ui_RegistrationWindow(object):
         self.lineEdit_name.setObjectName("lineEdit_name")
         self.verticalLayout_3.addWidget(self.lineEdit_name)
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(40, 530, 301, 16))
+        self.checkBox.setGeometry(QtCore.QRect(40, 550, 301, 16))
         self.checkBox.setObjectName("checkBox")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(40, 620, 371, 41))
-        self.pushButton.setStyleSheet("background-color: rgb(87, 227, 137);")
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(self.handle_register)
+        self.pushButton_register = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_register.setGeometry(QtCore.QRect(40, 620, 371, 41))
+        self.pushButton_register.setStyleSheet("background-color: rgb(87, 227, 137);")
+        self.pushButton_register.setObjectName("pushButton_register")
+        self.pushButton_register.clicked.connect(self.handle_register)
 
+        self.horizontalLayoutWidget_3 = QtWidgets.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(40, 450, 311, 61))
+        self.horizontalLayoutWidget_3.setObjectName("horizontalLayoutWidget_3")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_3)
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.label_7 = QtWidgets.QLabel(self.horizontalLayoutWidget_3)
+        self.label_7.setObjectName("label_7")
+        self.horizontalLayout_4.addWidget(self.label_7)
+        self.lineEdit_password = QtWidgets.QLineEdit(self.horizontalLayoutWidget_3)
+        self.lineEdit_password.setObjectName("lineEdit_password")
+        self.horizontalLayout_4.addWidget(self.lineEdit_password)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 450, 27))
@@ -138,7 +153,8 @@ class Ui_RegistrationWindow(object):
         self.label_4.setText(_translate("MainWindow", "Номер тел."))
         self.label_5.setText(_translate("MainWindow", "Ник / Назавние магазина:"))
         self.checkBox.setText(_translate("MainWindow", "Поставьте галачку (ВАЖНО)"))
-        self.pushButton.setText(_translate("MainWindow", "Зарегистрироваться"))
+        self.pushButton_register.setText(_translate("MainWindow", "Зарегистрироваться"))
+        self.label_7.setText(_translate("MainWindow", "password:"))
 
     def handle_register(self):
         is_seller: bool = self.radioButton_is_seller.isChecked()
@@ -152,13 +168,14 @@ class Ui_RegistrationWindow(object):
             return
 
         if is_seller:
+            from seller_mode_window import Ui_SellerModeWindow
             print("Добавлен аккаунт продавца")
             reg.register_seller(email, tel_number, name)
-            go_to_seller_mode(name, email, tel_number)
+            change_window(Ui_SellerModeWindow(), name, email, tel_number)
+            # go_to_seller_mode(name, email, tel_number)
         elif is_buyer:
             print("Добавлен аккаунт покупателя")
             reg.register_buyer(email, tel_number, name)
-            go_to_seller_mode(name, email, tel_number)
 
 
 # def go_to_registration():
