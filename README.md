@@ -39,9 +39,9 @@
 
 ### Запуск
 1. Перейдите в папку проекта.
-2. Запустить файл gui/welcome_window.py
+2. Запустить файл gui/run.py
    ```bash
-   python gui/welcome_window.py
+   python gui/run.py
    ```
 
  
