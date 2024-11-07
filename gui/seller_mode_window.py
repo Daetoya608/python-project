@@ -78,6 +78,8 @@ class Ui_SellerModeWindow(object):
         self.pushButton_addCard.setStyleSheet("background-color: rgb(246, 245, 244);\n"
 "color: rgb(51, 209, 122);")
         self.pushButton_addCard.setObjectName("pushButton_addCard")
+        self.pushButton_addCard.clicked.connect(self.handle_add_card_button)
+
         self.label_NAME = QtWidgets.QLabel(self.centralwidget)
         self.label_NAME.setGeometry(QtCore.QRect(120, 80, 341, 41))
         font = QtGui.QFont()
@@ -139,7 +141,10 @@ class Ui_SellerModeWindow(object):
         gui_utils.change_window(Ui_SellerModeWindow(), self.label_NAME.text(), self.label_EMAIL.text(),
                                 self.label_TELNUM.text())
 
-
     def handle_exit(self):
         from welcome_window import Ui_WelcomeWindow
         gui_utils.change_window(Ui_WelcomeWindow())
+
+    def handle_add_card_button(self):
+        from creating_card_window import Ui_AddCardWindow
+        gui_utils.change_window(Ui_AddCardWindow())

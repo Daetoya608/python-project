@@ -5,7 +5,7 @@ from app.models.feedback import Feedback
 new_product_card_id: int = 0
 
 class ProductCard:
-    def __init__(self, name: str, description: str = "", feedbacks: list[Feedback] = []):
+    def __init__(self, name: str, cost: str, description: str = "", feedbacks: list[Feedback] = []):
         global new_product_card_id
         self.name: str = name      # название
         self.description: str = description     # описание
@@ -17,3 +17,4 @@ class ProductCard:
         #self.id: int = add_product_card(name, description)   # id карточки товара
         # отзывы (оценки + комменты)
         self.feedbacks: list[Feedback] = feedbacks
+        self.cost = cost      # цена
