@@ -35,10 +35,14 @@ class Ui_AddCardWindow(object):
         self.pushButton_Exit.setGeometry(QtCore.QRect(360, 17, 71, 31))
         self.pushButton_Exit.setStyleSheet("background-color: rgb(224, 27, 36);")
         self.pushButton_Exit.setObjectName("pushButton_Exit")
+        self.pushButton_Exit.clicked.connect(self.handle_exit)
+
         self.pushButton_Home = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_Home.setGeometry(QtCore.QRect(270, 17, 71, 31))
         self.pushButton_Home.setStyleSheet("background-color: rgb(51, 209, 122);")
         self.pushButton_Home.setObjectName("pushButton_Home")
+        self.pushButton_Home.clicked.connect(self.handle_home)
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(10, 70, 191, 41))
         font = QtGui.QFont()
@@ -97,8 +101,24 @@ class Ui_AddCardWindow(object):
         self.pushButton_addCard.setText(_translate("MainWindow", "Добавить карточку товара"))
 
     def handle_add_card(self):
+        from seller_mode_window import Ui_SellerModeWindow
+        import app.services.registration as reg
         name: str = self.lineEdit_Name.text()
         cost: str = self.lineEdit_Cost.text()
         description: str = self.textEdit_Description.toPlainText()
-        registration.registered_sellers[mainwindow.current_account_ind].add_product_card(name, cost, description)
+        registration.registered_sellers[mainwindow.current_seller_account_ind].add_product_card(name, cost, description)
+        print("Добавлена карточка")
+        cur_seller = reg.registered_sellers[mainwindow.current_seller_account_ind]
+        gui_utils.change_window(Ui_SellerModeWindow(), cur_seller.store_name, cur_seller.email, cur_seller.phone_num)
 
+    def handle_home(self):
+        from gui.seller_mode_window import Ui_SellerModeWindow
+        import app.services.registration as reg
+        name = reg.registered_sellers[mainwindow.current_seller_account_ind].store_name
+        email = reg.registered_sellers[mainwindow.current_seller_account_ind].email
+        tel_num = reg.registered_sellers[mainwindow.current_seller_account_ind].phone_num
+        gui_utils.change_window(Ui_SellerModeWindow(), name, email, tel_num)
+
+    def handle_exit(self):
+        from welcome_window import Ui_WelcomeWindow
+        gui_utils.change_window(Ui_WelcomeWindow())

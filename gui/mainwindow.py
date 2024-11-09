@@ -4,4 +4,6 @@ from app.models.base_account import BaseAccount
 ui: object
 MainWindow: QtWidgets.QMainWindow
 
-current_account_ind: int = 0
+current_seller_account_ind: int = 0
+
+current_buyer_account_id: int = 0

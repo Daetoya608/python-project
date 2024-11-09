@@ -12,7 +12,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import mainwindow
 import gui_utils
-# from gui.welcome_window import Ui_WelcomeWindow
 
 
 class Ui_SellerModeWindow(object):
@@ -70,6 +69,8 @@ class Ui_SellerModeWindow(object):
         self.pushButton_lookAllCards.setFont(font)
         self.pushButton_lookAllCards.setStyleSheet("background-color: rgb(246, 245, 244);")
         self.pushButton_lookAllCards.setObjectName("pushButton_lookAllCards")
+        self.pushButton_lookAllCards.clicked.connect(self.handle_watch_cards)
+
         self.pushButton_addCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_addCard.setGeometry(QtCore.QRect(50, 290, 341, 41))
         font = QtGui.QFont()
@@ -134,7 +135,6 @@ class Ui_SellerModeWindow(object):
         # self.label_TELNUM.setText(_translate("MainWindow", "%tel. num:%"))
 
     def handle_home(self):
-        #pass
         # mainwindow.ui = Ui_SellerModeWindow()
         # mainwindow.ui.setupUi(mainwindow.MainWindow, self.label_NAME, self.label_EMAIL, self.label_TELNUM)
         # mainwindow.MainWindow.show()
@@ -148,3 +148,10 @@ class Ui_SellerModeWindow(object):
     def handle_add_card_button(self):
         from creating_card_window import Ui_AddCardWindow
         gui_utils.change_window(Ui_AddCardWindow())
+
+    def handle_watch_cards(self):
+        from watch_card_info_window import Ui_WatchCardsWindow
+        import app.services.registration as reg
+        if not reg.registered_sellers[mainwindow.current_seller_account_ind].is_empty_list_cards():
+            gui_utils.change_window(Ui_WatchCardsWindow())
+

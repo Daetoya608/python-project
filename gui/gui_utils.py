@@ -8,4 +8,4 @@ def change_window(window_object, *args):
 
 
 def set_seller_account(account_ind: int):
-    mainwindow.current_account_ind = account_ind
+    mainwindow.current_seller_account_ind = account_ind

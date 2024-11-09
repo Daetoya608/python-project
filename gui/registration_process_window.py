@@ -172,7 +172,7 @@ class Ui_RegistrationWindow(object):
             from seller_mode_window import Ui_SellerModeWindow
             print("Добавлен аккаунт продавца")
             reg.register_seller(email, tel_number, name, password)
-            mainwindow.current_account_ind = len(reg.registered_sellers) - 1
+            mainwindow.current_seller_account_ind = len(reg.registered_sellers) - 1
             change_window(Ui_SellerModeWindow(), name, email, tel_number)
             # go_to_seller_mode(name, email, tel_number)
         elif is_buyer:
