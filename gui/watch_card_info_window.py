@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import mainwindow
 
+import gui_utils
 
 class Ui_WatchCardsWindow(object):
 
@@ -33,10 +34,14 @@ class Ui_WatchCardsWindow(object):
         self.pushButton_Exit.setGeometry(QtCore.QRect(360, 17, 71, 31))
         self.pushButton_Exit.setStyleSheet("background-color: rgb(224, 27, 36);")
         self.pushButton_Exit.setObjectName("pushButton_Exit")
+        self.pushButton_Exit.clicked.connect(self.handle_exit)
+
         self.pushButton_Home = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_Home.setGeometry(QtCore.QRect(270, 17, 71, 31))
         self.pushButton_Home.setStyleSheet("background-color: rgb(51, 209, 122);")
         self.pushButton_Home.setObjectName("pushButton_Home")
+        self.pushButton_Home.clicked.connect(self.handle_home)
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(10, 70, 191, 41))
         font = QtGui.QFont()
@@ -99,9 +104,13 @@ class Ui_WatchCardsWindow(object):
         self.pushButton_NextCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_NextCard.setGeometry(QtCore.QRect(230, 660, 201, 41))
         self.pushButton_NextCard.setObjectName("pushButton_NextCard")
+        self.pushButton_NextCard.clicked.connect(self.handle_next)
+
         self.pushButton_BeforeCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_BeforeCard.setGeometry(QtCore.QRect(10, 660, 201, 41))
         self.pushButton_BeforeCard.setObjectName("pushButton_BeforeCard")
+        self.pushButton_BeforeCard.clicked.connect(self.handle_before)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -138,3 +147,45 @@ class Ui_WatchCardsWindow(object):
         self.label_Cost.setText(cost)
         self.label_Rate.setText(rate)
         self.plainTextEdit_Description.setPlainText(description)
+
+    def handle_home(self):
+        from gui.seller_mode_window import Ui_SellerModeWindow
+        import app.services.registration as reg
+        name = reg.registered_sellers[mainwindow.current_seller_account_ind].store_name
+        email = reg.registered_sellers[mainwindow.current_seller_account_ind].email
+        tel_num = reg.registered_sellers[mainwindow.current_seller_account_ind].phone_num
+        gui_utils.change_window(Ui_SellerModeWindow(), name, email, tel_num)
+
+    def handle_exit(self):
+        from welcome_window import Ui_WelcomeWindow
+        gui_utils.change_window(Ui_WelcomeWindow())
+
+    def handle_next(self):
+        import app.services.registration as reg
+        if self.current_card_ind + 1 == len(reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list):
+            return
+        self.current_card_ind += 1
+        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].name
+        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].cost
+        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].average_rating
+        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].description
+        self.set_data(name, cost, descr, str(rate))
+
+    def handle_before(self):
+        import app.services.registration as reg
+        if self.current_card_ind == 0:
+            return
+        self.current_card_ind -= 1
+        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].name
+        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].cost
+        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].average_rating
+        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+            self.current_card_ind].description
+        self.set_data(name, cost, descr, str(rate))

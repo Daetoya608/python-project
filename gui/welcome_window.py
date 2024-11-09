@@ -85,10 +85,9 @@ class Ui_WelcomeWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
 
     def handle_authorize(self):
-        print("Нажата кнопка 'Авторизация'")
-        # Здесь можно добавить код для перехода к авторизации или действия, связанные с авторизацией
+        from authorization_window import Ui_AuthorizationWindow
+        gui_utils.change_window(Ui_AuthorizationWindow())
 
-    # Функция, которая вызывается при нажатии кнопки регистрации
     def handle_register(self):
         from registration_process_window import Ui_RegistrationWindow
         gui_utils.change_window(Ui_RegistrationWindow())

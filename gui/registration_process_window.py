@@ -28,10 +28,10 @@ from gui.gui_utils import change_window
 #     mainwindow.MainWindow.show()
 
 
-def is_correct_input_data(is_seller: bool, is_buyer: bool, email: str, tel_num: str, name: str):
-    check1 = not email.isspace() and not tel_num.isspace() and not name.isspace()
+def is_correct_input_data(is_seller: bool, is_buyer: bool, email: str, tel_num: str, name: str, password: str):
+    check1 = not email.isspace() and not tel_num.isspace() and not name.isspace() and not password.isspace()
     check2 = (is_seller and not is_buyer) or (not is_seller and is_buyer)
-    check3 = email != "" and tel_num != "" and name != ""
+    check3 = email != "" and tel_num != "" and name != "" and password != ""
     return check1 and check2 and check3
 
 
@@ -163,20 +163,19 @@ class Ui_RegistrationWindow(object):
         tel_number: str = self.lineEdit_tel_number.text()
         name: str = self.lineEdit_name.text()
         password: str = self.lineEdit_password.text()
-        if not is_correct_input_data(is_seller, is_buyer, email, tel_number, name):
-            # <здесь> открыть сплывающее окно
-            print("неверные данные")
+        if not is_correct_input_data(is_seller, is_buyer, email, tel_number, name, password):
+            # print("неверные данные")
             return
 
         if is_seller:
             from seller_mode_window import Ui_SellerModeWindow
-            print("Добавлен аккаунт продавца")
+            # print("Добавлен аккаунт продавца")
             reg.register_seller(email, tel_number, name, password)
             mainwindow.current_seller_account_ind = len(reg.registered_sellers) - 1
             change_window(Ui_SellerModeWindow(), name, email, tel_number)
             # go_to_seller_mode(name, email, tel_number)
         elif is_buyer:
-            print("Добавлен аккаунт покупателя")
+            # print("Добавлен аккаунт покупателя")
             reg.register_buyer(email, tel_number, name, password)
 
 
