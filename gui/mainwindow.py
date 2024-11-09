@@ -5,5 +5,4 @@ ui: object
 MainWindow: QtWidgets.QMainWindow
 
 current_seller_account_ind: int = 0
-
-current_buyer_account_id: int = 0
+current_buyer_account_ind: int = 0

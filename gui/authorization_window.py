@@ -104,17 +104,23 @@ class Ui_AuthorizationWindow(object):
         self.label_7.setText(_translate("MainWindow", "password:"))
 
     def handle_authorize(self):
+        import app.services.registration as reg
         email: str = self.lineEdit_email.text()
         name: str = self.lineEdit_name.text()
         password: str = self.lineEdit_password.text()
         if not is_correct_input_data(email, name, password):
-            print("неверные данные")
+            # print("неверные данные")
             return
         seller_index = auth.seller_ind(email, name, password)
         if seller_index != -1:
             from seller_mode_window import Ui_SellerModeWindow
-            import app.services.registration as reg
             mainwindow.current_seller_account_ind = seller_index
             tel_num = reg.registered_sellers[seller_index].phone_num
             gui_utils.change_window(Ui_SellerModeWindow(), name, email, tel_num)
-        # Обработка для buyer
+
+        buyer_index = auth.buyer_ind(email, name, password)
+        if buyer_index != -1:
+            from buyer_mode_window import Ui_BuyerModeWindow
+            mainwindow.current_buyer_account_ind = buyer_index
+            tel_num = reg.registered_buyers[buyer_index].phone_num
+            gui_utils.change_window(Ui_BuyerModeWindow())

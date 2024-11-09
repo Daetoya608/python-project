@@ -12,3 +12,12 @@ def seller_ind(email: str, store_name: str, password: str) -> int:
             i].password:
             return i
     return -1
+
+
+def buyer_ind(email: str, user_name: str, password: str) -> int:
+    for i in range(0, len(reg.registered_buyers)):
+        if email == reg.registered_buyers[i].email and user_name == reg.registered_buyers[
+            i].user_name and password == reg.registered_buyers[
+            i].password:
+            return i
+    return -1
