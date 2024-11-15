@@ -150,8 +150,7 @@ class Ui_SellerModeWindow(object):
         gui_utils.change_window(Ui_AddCardWindow())
 
     def handle_watch_cards(self):
-        from watch_card_info_window import Ui_WatchCardsWindow
+        from watch_card_info_window import Ui_WatchCardsWindowSeller
         import app.services.registration as reg
         if not reg.registered_sellers[mainwindow.current_seller_account_ind].is_empty_list_cards():
-            gui_utils.change_window(Ui_WatchCardsWindow())
-
+            gui_utils.change_window(Ui_WatchCardsWindowSeller())

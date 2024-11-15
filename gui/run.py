@@ -11,7 +11,6 @@ import sys
 app = QtWidgets.QApplication(sys.argv)
 mainwindow.MainWindow = QtWidgets.QMainWindow()
 mainwindow.ui = Ui_WelcomeWindow()
-#ui = Ui_RegistrationWindow()
 mainwindow.ui.setupUi(mainwindow.MainWindow)
 mainwindow.MainWindow.show()
 sys.exit(app.exec_())

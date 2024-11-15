@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'watch_card_info_window.ui'
+# Form implementation generated from reading ui file 'watch_card_for_buyer_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -9,14 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 import mainwindow
 
-import gui_utils
-
-class Ui_WatchCardsWindowSeller(object):
-
-    def setupUi(self, MainWindow, current_card_ind = 0):
+class Ui_WatchCardForBuyer(object):
+    def setupUi(self, MainWindow, current_seller: int = 0, current_card_ind: int = 0):
         self.current_card_ind = current_card_ind
+        self.current_seller = current_seller
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(450, 750)
         MainWindow.setMinimumSize(QtCore.QSize(450, 750))
@@ -66,8 +65,6 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_Name.setFont(font)
         self.label_Name.setStyleSheet("color: rgb(38, 162, 105);")
         self.label_Name.setObjectName("label_Name")
-
-
         self.label_Cost = QtWidgets.QLabel(self.centralwidget)
         self.label_Cost.setGeometry(QtCore.QRect(110, 170, 341, 31))
         font = QtGui.QFont()
@@ -75,13 +72,11 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_Cost.setFont(font)
         self.label_Cost.setStyleSheet("color: rgb(38, 162, 105);")
         self.label_Cost.setObjectName("label_Cost")
-
         self.plainTextEdit_Description = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit_Description.setGeometry(QtCore.QRect(10, 310, 411, 131))
         self.plainTextEdit_Description.setReadOnly(True)
         self.plainTextEdit_Description.setPlainText("")
         self.plainTextEdit_Description.setObjectName("plainTextEdit_Description")
-
         self.pushButton_LookFeedbacks = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_LookFeedbacks.setGeometry(QtCore.QRect(20, 470, 401, 41))
         self.pushButton_LookFeedbacks.setStyleSheet("background-color: rgb(222, 221, 218);")
@@ -99,7 +94,6 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_Rate.setFont(font)
         self.label_Rate.setStyleSheet("color: rgb(38, 162, 105);")
         self.label_Rate.setObjectName("label_Rate")
-
         self.pushButton_NextCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_NextCard.setGeometry(QtCore.QRect(230, 660, 201, 41))
         self.pushButton_NextCard.setObjectName("pushButton_NextCard")
@@ -110,6 +104,16 @@ class Ui_WatchCardsWindowSeller(object):
         self.pushButton_BeforeCard.setObjectName("pushButton_BeforeCard")
         self.pushButton_BeforeCard.clicked.connect(self.handle_before)
 
+        self.pushButton_AddToCart = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_AddToCart.setGeometry(QtCore.QRect(40, 530, 361, 41))
+        self.pushButton_AddToCart.setStyleSheet("background-color: rgb(255, 120, 0);")
+        self.pushButton_AddToCart.setObjectName("pushButton_AddToCart")
+        self.pushButton_AddToCart.clicked.connect(self.handle_add_to_cart)
+
+        self.pushButton_BuyProduct = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_BuyProduct.setGeometry(QtCore.QRect(40, 590, 361, 41))
+        self.pushButton_BuyProduct.setStyleSheet("background-color: rgb(51, 209, 122);")
+        self.pushButton_BuyProduct.setObjectName("pushButton_BuyProduct")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -135,63 +139,108 @@ class Ui_WatchCardsWindowSeller(object):
         #self.label_Rate.setText(_translate("MainWindow", "%RATE%"))
         self.pushButton_NextCard.setText(_translate("MainWindow", "Следующее"))
         self.pushButton_BeforeCard.setText(_translate("MainWindow", "Предыдущее"))
+        self.pushButton_AddToCart.setText(_translate("MainWindow", "Добавить в корзину"))
+        self.pushButton_BuyProduct.setText(_translate("MainWindow", "Купить"))
+        self.pushButton_BuyProduct.clicked.connect(self.handle_buy_product)
 
-    def set_data(self, name, cost, description = "", rate = "0"):
+    def find_and_set_near_right(self):
+        import app.services.registration as reg
+        for seller_ind in range(self.current_seller, len(reg.registered_sellers)):
+            for pc_ind in range(0, len(reg.registered_sellers[seller_ind].product_cards_list)):
+                if seller_ind == self.current_seller and pc_ind <= self.current_card_ind:
+                    continue
+
+                self.current_seller = seller_ind
+                self.current_card_ind = pc_ind
+                return
+
+    def find_and_set_near_left(self):
+        import app.services.registration as reg
+        for seller_ind in range(self.current_seller, -1, -1):
+            for pc_ind in range(len(reg.registered_sellers[seller_ind].product_cards_list) - 1, -1, -1):
+                if seller_ind == self.current_seller and pc_ind >= self.current_card_ind:
+                    continue
+
+                self.current_seller = seller_ind
+                self.current_card_ind = pc_ind
+                return
+
+
+    def set_data(self, name, cost, description, rate):
         self.label_Name.setText(name)
         self.label_Cost.setText(cost)
         self.label_Rate.setText(rate)
         self.plainTextEdit_Description.setPlainText(description)
 
+
     def set_current_data(self):
         import app.services.registration as reg
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        if len(reg.registered_sellers) == 0:
+            return
+
+        name = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].name
-        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        cost = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].cost
-        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        rate = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].average_rating
-        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        descr = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].description
         self.set_data(name, cost, descr, str(rate))
 
-    def handle_home(self):
-        from gui.seller_mode_window import Ui_SellerModeWindow
-        import app.services.registration as reg
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].store_name
-        email = reg.registered_sellers[mainwindow.current_seller_account_ind].email
-        tel_num = reg.registered_sellers[mainwindow.current_seller_account_ind].phone_num
-        gui_utils.change_window(Ui_SellerModeWindow(), name, email, tel_num)
 
     def handle_exit(self):
         from welcome_window import Ui_WelcomeWindow
+        import gui_utils
         gui_utils.change_window(Ui_WelcomeWindow())
 
+
+    def handle_home(self):
+        import gui_utils
+        from gui.buyer_mode_window import Ui_BuyerModeWindow
+        gui_utils.change_window(Ui_BuyerModeWindow())
+
     def handle_next(self):
-        import app.services.registration as reg
-        if self.current_card_ind + 1 == len(reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list):
-            return
-        self.current_card_ind += 1
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].name
-        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].cost
-        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].average_rating
-        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].description
-        self.set_data(name, cost, descr, str(rate))
+        self.find_and_set_near_right()
+        self.set_current_data()
 
     def handle_before(self):
+        self.find_and_set_near_left()
+        self.set_current_data()
+
+    def handle_buy_product(self):
         import app.services.registration as reg
-        if self.current_card_ind == 0:
-            return
-        self.current_card_ind -= 1
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].name
-        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].cost
-        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].average_rating
-        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].description
-        self.set_data(name, cost, descr, str(rate))
+        for i in range(len(reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products)):
+            name_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].name
+            cost_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].cost
+            des_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].description
+            if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
+                reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][1] += 1
+                print("куплено")
+                return
+
+        reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products.append([
+            reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind], 1, self.current_seller, self.current_card_ind
+        ])
+        print("Куплено")
+
+
+    def handle_add_to_cart(self):
+        import app.services.registration as reg
+
+        for i in range(len(reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list)):
+            name_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][
+                0].name
+            cost_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][
+                0].cost
+            des_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][
+                0].description
+            if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
+                reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][1] += 1
+                print("добавлено в корзину")
+                return
+
+        reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list.append([
+            reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind], 1, self.current_seller, self.current_card_ind
+        ])
+        print("Добавлено в корзину")

@@ -5,7 +5,7 @@ from app.models.feedback import Feedback
 new_product_card_id: int = 0
 
 class ProductCard:
-    def __init__(self, name: str, cost: str, description: str = "", buy_count = 0, sum_of_rating = 0, feedbacks: list[Feedback] = []):
+    def __init__(self, feedbacks: list[Feedback], name: str, cost: str, description: str = "", buy_count = 0, sum_of_rating = 0):
         global new_product_card_id
         self.name: str = name      # название
         self.description: str = description     # описание
@@ -18,3 +18,9 @@ class ProductCard:
         # отзывы (оценки + комменты)
         self.feedbacks: list[Feedback] = feedbacks
         self.cost = cost      # цена
+
+    def update_average_rate(self):
+        self.average_rating = h.get_average(self.sum_of_ratings, self.buy_count)
+
+    def add_feedback(self, feedback: Feedback):
+        self.feedbacks.append(feedback)

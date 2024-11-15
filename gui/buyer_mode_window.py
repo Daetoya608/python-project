@@ -69,6 +69,8 @@ class Ui_BuyerModeWindow(object):
         self.pushButton_lookAllCards.setFont(font)
         self.pushButton_lookAllCards.setStyleSheet("background-color: rgb(246, 245, 244);")
         self.pushButton_lookAllCards.setObjectName("pushButton_lookAllCards")
+        self.pushButton_lookAllCards.clicked.connect(self.handle_watch_cards)
+
         self.label_NAME = QtWidgets.QLabel(self.centralwidget)
         self.label_NAME.setGeometry(QtCore.QRect(120, 80, 341, 41))
         font = QtGui.QFont()
@@ -95,6 +97,8 @@ class Ui_BuyerModeWindow(object):
         self.pushButton_boughtProducts.setFont(font)
         self.pushButton_boughtProducts.setStyleSheet("background-color: rgb(246, 245, 244);")
         self.pushButton_boughtProducts.setObjectName("pushButton_boughtProducts")
+        self.pushButton_boughtProducts.clicked.connect(self.handle_look_bought_cards)
+
         self.label_5.raise_()
         self.label.raise_()
         self.pushButton_Exit.raise_()
@@ -153,3 +157,30 @@ class Ui_BuyerModeWindow(object):
         import gui_utils
         from welcome_window import Ui_WelcomeWindow
         gui_utils.change_window(Ui_WelcomeWindow())
+
+    def handle_watch_cards(self):
+        import app.services.registration as reg
+        import gui_utils
+
+        if len(reg.registered_sellers) == 0:
+            return
+
+        for i in range(len(reg.registered_sellers)):
+            if len(reg.registered_sellers[i].product_cards_list) != 0:
+                break
+            if i == len(reg.registered_sellers) - 1:
+                return
+
+        from watch_card_for_buyer_window import Ui_WatchCardForBuyer
+        gui_utils.change_window(Ui_WatchCardForBuyer())
+
+
+    def handle_look_bought_cards(self):
+        from watch_bought_cards_window import Ui_WatchBoughtCardsWindow
+        import gui_utils
+        import app.services.registration as reg
+
+        if len(reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products) == 0:
+            return
+
+        gui_utils.change_window(Ui_WatchBoughtCardsWindow())

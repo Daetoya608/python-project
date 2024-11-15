@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'watch_card_info_window.ui'
+# Form implementation generated from reading ui file 'watch_bought_cards_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -9,14 +9,18 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+import app.services.registration as reg
 import mainwindow
 
-import gui_utils
 
-class Ui_WatchCardsWindowSeller(object):
+class Ui_WatchBoughtCardsWindow(object):
+    def setupUi(self, MainWindow, current_bought_card_ind = 0):
+        self.current_card_ind: int
+        self.current_seller: int
+        self.current_bought_card_ind: int = current_bought_card_ind
 
-    def setupUi(self, MainWindow, current_card_ind = 0):
-        self.current_card_ind = current_card_ind
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(450, 750)
         MainWindow.setMinimumSize(QtCore.QSize(450, 750))
@@ -66,8 +70,6 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_Name.setFont(font)
         self.label_Name.setStyleSheet("color: rgb(38, 162, 105);")
         self.label_Name.setObjectName("label_Name")
-
-
         self.label_Cost = QtWidgets.QLabel(self.centralwidget)
         self.label_Cost.setGeometry(QtCore.QRect(110, 170, 341, 31))
         font = QtGui.QFont()
@@ -75,13 +77,11 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_Cost.setFont(font)
         self.label_Cost.setStyleSheet("color: rgb(38, 162, 105);")
         self.label_Cost.setObjectName("label_Cost")
-
         self.plainTextEdit_Description = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit_Description.setGeometry(QtCore.QRect(10, 310, 411, 131))
         self.plainTextEdit_Description.setReadOnly(True)
         self.plainTextEdit_Description.setPlainText("")
         self.plainTextEdit_Description.setObjectName("plainTextEdit_Description")
-
         self.pushButton_LookFeedbacks = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_LookFeedbacks.setGeometry(QtCore.QRect(20, 470, 401, 41))
         self.pushButton_LookFeedbacks.setStyleSheet("background-color: rgb(222, 221, 218);")
@@ -99,7 +99,6 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_Rate.setFont(font)
         self.label_Rate.setStyleSheet("color: rgb(38, 162, 105);")
         self.label_Rate.setObjectName("label_Rate")
-
         self.pushButton_NextCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_NextCard.setGeometry(QtCore.QRect(230, 660, 201, 41))
         self.pushButton_NextCard.setObjectName("pushButton_NextCard")
@@ -108,7 +107,13 @@ class Ui_WatchCardsWindowSeller(object):
         self.pushButton_BeforeCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_BeforeCard.setGeometry(QtCore.QRect(10, 660, 201, 41))
         self.pushButton_BeforeCard.setObjectName("pushButton_BeforeCard")
-        self.pushButton_BeforeCard.clicked.connect(self.handle_before)
+        self.pushButton_BeforeCard.clicked.connect(self.handle_prev)
+
+        self.pushButton_addFeedback = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_addFeedback.setGeometry(QtCore.QRect(40, 540, 361, 41))
+        self.pushButton_addFeedback.setStyleSheet("background-color: rgb(246, 211, 45);")
+        self.pushButton_addFeedback.setObjectName("pushButton_addFeedback")
+        self.pushButton_addFeedback.clicked.connect(self.handle_add_feedback)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -128,15 +133,35 @@ class Ui_WatchCardsWindowSeller(object):
         self.label_2.setText(_translate("MainWindow", "Название товара:"))
         self.label_3.setText(_translate("MainWindow", "Цена ($):"))
         self.label_4.setText(_translate("MainWindow", "Описание:"))
-        #self.label_Name.setText(_translate("MainWindow", "%NAME%"))
-        #self.label_Cost.setText(_translate("MainWindow", "%COST%"))
+        # self.label_Name.setText(_translate("MainWindow", "%NAME%"))
+        # self.label_Cost.setText(_translate("MainWindow", "%COST%"))
         self.pushButton_LookFeedbacks.setText(_translate("MainWindow", "Посмотреть отзывы"))
         self.label_5.setText(_translate("MainWindow", "Оценка:"))
-        #self.label_Rate.setText(_translate("MainWindow", "%RATE%"))
+        # self.label_Rate.setText(_translate("MainWindow", "%RATE%"))
         self.pushButton_NextCard.setText(_translate("MainWindow", "Следующее"))
         self.pushButton_BeforeCard.setText(_translate("MainWindow", "Предыдущее"))
+        self.pushButton_addFeedback.setText(_translate("MainWindow", "Оставить отзыв"))
 
-    def set_data(self, name, cost, description = "", rate = "0"):
+
+    def update_ind(self):
+        self.current_seller = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[self.current_bought_card_ind][2]
+        self.current_card_ind = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[self.current_bought_card_ind][3]
+
+
+
+    def next_card(self):
+        if self.current_bought_card_ind == len(reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products) - 1:
+            return
+        self.current_bought_card_ind += 1
+        self.update_ind()
+
+    def prev_card(self):
+        if self.current_bought_card_ind == 0:
+            return
+        self.current_bought_card_ind -= 1
+        self.update_ind()
+
+    def set_data(self, name, cost, description, rate):
         self.label_Name.setText(name)
         self.label_Cost.setText(cost)
         self.label_Rate.setText(rate)
@@ -144,54 +169,46 @@ class Ui_WatchCardsWindowSeller(object):
 
     def set_current_data(self):
         import app.services.registration as reg
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        if len(reg.registered_sellers) == 0:
+            return
+
+        self.update_ind()
+
+        name = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].name
-        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        cost = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].cost
-        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        rate = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].average_rating
-        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
+        descr = reg.registered_sellers[self.current_seller].product_cards_list[
             self.current_card_ind].description
         self.set_data(name, cost, descr, str(rate))
 
-    def handle_home(self):
-        from gui.seller_mode_window import Ui_SellerModeWindow
-        import app.services.registration as reg
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].store_name
-        email = reg.registered_sellers[mainwindow.current_seller_account_ind].email
-        tel_num = reg.registered_sellers[mainwindow.current_seller_account_ind].phone_num
-        gui_utils.change_window(Ui_SellerModeWindow(), name, email, tel_num)
 
     def handle_exit(self):
         from welcome_window import Ui_WelcomeWindow
+        import gui_utils
         gui_utils.change_window(Ui_WelcomeWindow())
 
-    def handle_next(self):
-        import app.services.registration as reg
-        if self.current_card_ind + 1 == len(reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list):
-            return
-        self.current_card_ind += 1
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].name
-        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].cost
-        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].average_rating
-        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].description
-        self.set_data(name, cost, descr, str(rate))
 
-    def handle_before(self):
-        import app.services.registration as reg
-        if self.current_card_ind == 0:
-            return
-        self.current_card_ind -= 1
-        name = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].name
-        cost = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].cost
-        rate = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].average_rating
-        descr = reg.registered_sellers[mainwindow.current_seller_account_ind].product_cards_list[
-            self.current_card_ind].description
-        self.set_data(name, cost, descr, str(rate))
+    def handle_home(self):
+        import gui_utils
+        from gui.buyer_mode_window import Ui_BuyerModeWindow
+        gui_utils.change_window(Ui_BuyerModeWindow())
+
+
+    def handle_next(self):
+        self.next_card()
+        self.set_current_data()
+
+    def handle_prev(self):
+        self.prev_card()
+        self.set_current_data()
+
+    def handle_add_feedback(self):
+        import gui_utils
+        from add_feedback_window import Ui_AddFeedbackWindow
+
+        gui_utils.change_window(Ui_AddFeedbackWindow(), self.current_seller, self.current_card_ind, self.current_bought_card_ind)
+
+    # обработчик отзывов
