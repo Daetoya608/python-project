@@ -151,3 +151,4 @@ class Ui_AddFeedbackWindow(object):
         self.update_rate()
         print("Добавлен отзыв")
         self.handle_home()
+

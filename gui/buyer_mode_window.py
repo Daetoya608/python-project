@@ -90,6 +90,8 @@ class Ui_BuyerModeWindow(object):
         self.pushButton_Cart.setFont(font)
         self.pushButton_Cart.setStyleSheet("background-color: rgb(246, 245, 244);")
         self.pushButton_Cart.setObjectName("pushButton_Cart")
+        self.pushButton_Cart.clicked.connect(self.handle_watchCart)
+
         self.pushButton_boughtProducts = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_boughtProducts.setGeometry(QtCore.QRect(50, 370, 341, 41))
         font = QtGui.QFont()
@@ -178,9 +180,17 @@ class Ui_BuyerModeWindow(object):
     def handle_look_bought_cards(self):
         from watch_bought_cards_window import Ui_WatchBoughtCardsWindow
         import gui_utils
-        import app.services.registration as reg
 
         if len(reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products) == 0:
             return
 
         gui_utils.change_window(Ui_WatchBoughtCardsWindow())
+
+
+    def handle_watchCart(self):
+        if len(reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list) == 0:
+            return
+
+        import gui_utils
+        from watch_card_in_cart_window import Ui_WatchCartWindow
+        gui_utils.change_window(Ui_WatchCartWindow())

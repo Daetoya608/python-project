@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'watch_card_for_buyer_window.ui'
+# Form implementation generated from reading ui file 'watch_card_in_cart_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -13,10 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import mainwindow
 import app.services.registration as reg
 
-class Ui_WatchCardForBuyer(object):
-    def setupUi(self, MainWindow, current_seller: int = 0, current_card_ind: int = 0):
-        self.current_card_ind = current_card_ind
-        self.current_seller = current_seller
+class Ui_WatchCartWindow(object):
+    def setupUi(self, MainWindow):
+        self.current_cart_cart_index = 0
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(450, 750)
         MainWindow.setMinimumSize(QtCore.QSize(450, 750))
@@ -105,14 +104,12 @@ class Ui_WatchCardForBuyer(object):
         self.pushButton_BeforeCard = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_BeforeCard.setGeometry(QtCore.QRect(10, 660, 201, 41))
         self.pushButton_BeforeCard.setObjectName("pushButton_BeforeCard")
-        self.pushButton_BeforeCard.clicked.connect(self.handle_before)
+        self.pushButton_BeforeCard.clicked.connect(self.handle_prev)
 
-        self.pushButton_AddToCart = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_AddToCart.setGeometry(QtCore.QRect(40, 530, 361, 41))
-        self.pushButton_AddToCart.setStyleSheet("background-color: rgb(255, 120, 0);")
-        self.pushButton_AddToCart.setObjectName("pushButton_AddToCart")
-        self.pushButton_AddToCart.clicked.connect(self.handle_add_to_cart)
-
+        self.pushButton_DeleteFromCart = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_DeleteFromCart.setGeometry(QtCore.QRect(40, 530, 361, 41))
+        self.pushButton_DeleteFromCart.setStyleSheet("background-color: rgb(224, 27, 36);")
+        self.pushButton_DeleteFromCart.setObjectName("pushButton_DeleteFromCart")
         self.pushButton_BuyProduct = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_BuyProduct.setGeometry(QtCore.QRect(40, 590, 361, 41))
         self.pushButton_BuyProduct.setStyleSheet("background-color: rgb(51, 209, 122);")
@@ -135,38 +132,15 @@ class Ui_WatchCardForBuyer(object):
         self.label_2.setText(_translate("MainWindow", "Название товара:"))
         self.label_3.setText(_translate("MainWindow", "Цена ($):"))
         self.label_4.setText(_translate("MainWindow", "Описание:"))
-        #self.label_Name.setText(_translate("MainWindow", "%NAME%"))
-        #self.label_Cost.setText(_translate("MainWindow", "%COST%"))
+        self.label_Name.setText(_translate("MainWindow", "%NAME%"))
+        self.label_Cost.setText(_translate("MainWindow", "%COST%"))
         self.pushButton_LookFeedbacks.setText(_translate("MainWindow", "Посмотреть отзывы"))
         self.label_5.setText(_translate("MainWindow", "Оценка:"))
-        #self.label_Rate.setText(_translate("MainWindow", "%RATE%"))
+        self.label_Rate.setText(_translate("MainWindow", "%RATE%"))
         self.pushButton_NextCard.setText(_translate("MainWindow", "Следующее"))
         self.pushButton_BeforeCard.setText(_translate("MainWindow", "Предыдущее"))
-        self.pushButton_AddToCart.setText(_translate("MainWindow", "Добавить в корзину"))
+        self.pushButton_DeleteFromCart.setText(_translate("MainWindow", "Удалить из корзины"))
         self.pushButton_BuyProduct.setText(_translate("MainWindow", "Купить"))
-        self.pushButton_BuyProduct.clicked.connect(self.handle_buy_product)
-
-    def find_and_set_near_right(self):
-        import app.services.registration as reg
-        for seller_ind in range(self.current_seller, len(reg.registered_sellers)):
-            for pc_ind in range(0, len(reg.registered_sellers[seller_ind].product_cards_list)):
-                if seller_ind == self.current_seller and pc_ind <= self.current_card_ind:
-                    continue
-
-                self.current_seller = seller_ind
-                self.current_card_ind = pc_ind
-                return
-
-    def find_and_set_near_left(self):
-        import app.services.registration as reg
-        for seller_ind in range(self.current_seller, -1, -1):
-            for pc_ind in range(len(reg.registered_sellers[seller_ind].product_cards_list) - 1, -1, -1):
-                if seller_ind == self.current_seller and pc_ind >= self.current_card_ind:
-                    continue
-
-                self.current_seller = seller_ind
-                self.current_card_ind = pc_ind
-                return
 
 
     def set_data(self, name, cost, description, rate):
@@ -177,19 +151,35 @@ class Ui_WatchCardForBuyer(object):
 
 
     def set_current_data(self):
-        import app.services.registration as reg
-        if len(reg.registered_sellers) == 0:
-            return
+        name = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[
+            self.current_cart_cart_index][0].name
+        cost = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[
+            self.current_cart_cart_index][0].cost
+        descr = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[
+            self.current_cart_cart_index][0].description
+        rate = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[
+            self.current_cart_cart_index][0].average_rating
 
-        name = reg.registered_sellers[self.current_seller].product_cards_list[
-            self.current_card_ind].name
-        cost = reg.registered_sellers[self.current_seller].product_cards_list[
-            self.current_card_ind].cost
-        rate = reg.registered_sellers[self.current_seller].product_cards_list[
-            self.current_card_ind].average_rating
-        descr = reg.registered_sellers[self.current_seller].product_cards_list[
-            self.current_card_ind].description
         self.set_data(name, cost, descr, str(rate))
+
+
+    def next(self):
+        if (self.current_cart_cart_index == len(reg.registered_buyers[
+            mainwindow.current_buyer_account_ind].shopping_cart.product_card_list) - 1):
+            return
+        self.current_cart_cart_index += 1
+
+
+    def prev(self):
+        if (self.current_cart_cart_index == 0):
+            return
+        self.current_cart_cart_index -= 1
+
+
+    def handle_home(self):
+        import gui_utils
+        from gui.buyer_mode_window import Ui_BuyerModeWindow
+        gui_utils.change_window(Ui_BuyerModeWindow())
 
 
     def handle_exit(self):
@@ -198,62 +188,31 @@ class Ui_WatchCardForBuyer(object):
         gui_utils.change_window(Ui_WelcomeWindow())
 
 
-    def handle_home(self):
-        import gui_utils
-        from gui.buyer_mode_window import Ui_BuyerModeWindow
-        gui_utils.change_window(Ui_BuyerModeWindow())
-
     def handle_next(self):
-        self.find_and_set_near_right()
+        self.next()
         self.set_current_data()
 
-    def handle_before(self):
-        self.find_and_set_near_left()
+
+    def handle_prev(self):
+        self.prev()
         self.set_current_data()
-
-    def handle_buy_product(self):
-        import app.services.registration as reg
-        for i in range(len(reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products)):
-            name_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].name
-            cost_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].cost
-            des_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].description
-            if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
-                reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][1] += 1
-                print("куплено")
-                return
-
-        reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products.append([
-            reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind], 1, self.current_seller, self.current_card_ind
-        ])
-        print("Куплено")
-
-
-    def handle_add_to_cart(self):
-        import app.services.registration as reg
-
-        for i in range(len(reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list)):
-            name_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][
-                0].name
-            cost_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][
-                0].cost
-            des_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][
-                0].description
-            if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
-                reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][1] += 1
-                print("добавлено в корзину")
-                return
-
-        reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list.append([
-            reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind], 1, self.current_seller, self.current_card_ind
-        ])
-        print("Добавлено в корзину")
 
 
     def handle_look_feedback(self):
         from watch_feedback_window import Ui_WatchFeedbackWindow
         import gui_utils
 
-        if len(reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind].feedbacks) == 0:
+        current_seller = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[
+            self.current_cart_cart_index][2]
+        current_card = reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[
+            self.current_cart_cart_index][3]
+
+        if len(reg.registered_sellers[current_seller].product_cards_list[current_card].feedbacks) == 0:
             return
 
-        gui_utils.change_window(Ui_WatchFeedbackWindow(), self.current_seller, self.current_card_ind)
+        gui_utils.change_window(Ui_WatchFeedbackWindow(), current_seller, current_card)
+
+
+
+
+# удалить из корзины, купить
