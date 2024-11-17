@@ -5,12 +5,11 @@ from app.models.product_card import ProductCard
 
 
 class Buyer(BaseAccount):
-    def __init__(self, email: str, phone_num: str, user_name: str, password: str, shopping_cart: Shopping_cart = Shopping_cart([]),
-                 bought_products: Bought_products = Bought_products([])):
+    def __init__(self, email: str, phone_num: str, user_name: str, password: str):
         super().__init__(email, phone_num, password)
         self.user_name: str = user_name
-        self.shopping_cart: Shopping_cart = shopping_cart
-        self.bought_products: Bought_products = bought_products
+        self.shopping_cart: Shopping_cart = Shopping_cart([])
+        self.bought_products: Bought_products = Bought_products([])
 
     def add_card_to_cart(self, product_card):
         self.shopping_cart.add_product_card(product_card)

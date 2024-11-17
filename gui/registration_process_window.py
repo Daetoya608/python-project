@@ -164,19 +164,16 @@ class Ui_RegistrationWindow(object):
         name: str = self.lineEdit_name.text()
         password: str = self.lineEdit_password.text()
         if not is_correct_input_data(is_seller, is_buyer, email, tel_number, name, password):
-            # print("неверные данные")
             return
 
         if is_seller:
             from seller_mode_window import Ui_SellerModeWindow
-            # print("Добавлен аккаунт продавца")
             reg.register_seller(email, tel_number, name, password, [])
             mainwindow.current_seller_account_ind = len(reg.registered_sellers) - 1
             change_window(Ui_SellerModeWindow(), name, email, tel_number)
             # go_to_seller_mode(name, email, tel_number)
         elif is_buyer:
             from buyer_mode_window import Ui_BuyerModeWindow
-            # print("Добавлен аккаунт покупателя")
             reg.register_buyer(email, tel_number, name, password)
             mainwindow.current_buyer_account_ind = len(reg.registered_buyers) - 1
             change_window(Ui_BuyerModeWindow())

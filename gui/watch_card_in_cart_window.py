@@ -230,12 +230,10 @@ class Ui_WatchCartWindow(object):
             des_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].description
             if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
                 reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][1] += 1
-                print("куплено")
                 return
 
         reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products.append([
             reg.registered_sellers[current_seller].product_cards_list[current_card], 1, current_seller, current_card])
-        print("Куплено")
 
 
     def handle_delete(self):

@@ -219,13 +219,11 @@ class Ui_WatchCardForBuyer(object):
             des_ = reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][0].description
             if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
                 reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products[i][1] += 1
-                print("куплено")
                 return
 
         reg.registered_buyers[mainwindow.current_buyer_account_ind].bought_products.bought_products.append([
             reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind], 1, self.current_seller, self.current_card_ind
         ])
-        print("Куплено")
 
 
     def handle_add_to_cart(self):
@@ -240,13 +238,11 @@ class Ui_WatchCardForBuyer(object):
                 0].description
             if self.label_Name.text() == name_ and self.label_Cost.text() == cost_ and self.plainTextEdit_Description.toPlainText() == des_:
                 reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list[i][1] += 1
-                print("добавлено в корзину")
                 return
 
         reg.registered_buyers[mainwindow.current_buyer_account_ind].shopping_cart.product_card_list.append([
             reg.registered_sellers[self.current_seller].product_cards_list[self.current_card_ind], 1, self.current_seller, self.current_card_ind
         ])
-        print("Добавлено в корзину")
 
 
     def handle_look_feedback(self):

@@ -107,7 +107,6 @@ class Ui_AddCardWindow(object):
         cost: str = self.lineEdit_Cost.text()
         description: str = self.textEdit_Description.toPlainText()
         registration.registered_sellers[mainwindow.current_seller_account_ind].add_product_card(name, cost, description)
-        print("Добавлена карточка")
         cur_seller = reg.registered_sellers[mainwindow.current_seller_account_ind]
         gui_utils.change_window(Ui_SellerModeWindow(), cur_seller.store_name, cur_seller.email, cur_seller.phone_num)
 

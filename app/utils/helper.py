@@ -7,4 +7,4 @@ def get_current_datetime() -> str:
 def get_average(sum_rate: int, amount: int) -> float:
     if amount == 0:
         return 0
-    return sum_rate / amount
+    return round(sum_rate / amount, 1)

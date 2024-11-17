@@ -149,6 +149,5 @@ class Ui_AddFeedbackWindow(object):
             fb.Feedback(mainwindow.current_buyer_account_ind, rate, des)
         )
         self.update_rate()
-        print("Добавлен отзыв")
         self.handle_home()
 

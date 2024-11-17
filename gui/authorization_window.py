@@ -109,7 +109,6 @@ class Ui_AuthorizationWindow(object):
         name: str = self.lineEdit_name.text()
         password: str = self.lineEdit_password.text()
         if not is_correct_input_data(email, name, password):
-            # print("неверные данные")
             return
         seller_index = auth.seller_ind(email, name, password)
         if seller_index != -1:
