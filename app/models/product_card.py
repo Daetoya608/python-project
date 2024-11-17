@@ -1,23 +1,16 @@
 import app.utils.helper as h
-from db.database import add_product_card
 from app.models.feedback import Feedback
 
-new_product_card_id: int = 0
 
 class ProductCard:
     def __init__(self, feedbacks: list[Feedback], name: str, cost: str, description: str = "", buy_count = 0, sum_of_rating = 0):
-        global new_product_card_id
-        self.name: str = name      # название
-        self.description: str = description     # описание
-        self.buy_count: int = buy_count     # кол-во покупок
-        self.sum_of_ratings: int = sum_of_rating  # сумма рейтинга
-        self.average_rating: float = h.get_average(self.sum_of_ratings, self.buy_count)  # средний рейтинг
-        self.id: int = new_product_card_id
-        new_product_card_id += 1
-        #self.id: int = add_product_card(name, description)   # id карточки товара
-        # отзывы (оценки + комменты)
-        self.feedbacks: list[Feedback] = feedbacks
-        self.cost = cost      # цена
+        self.name: str = name      # product name
+        self.description: str = description     # product's description
+        self.buy_count: int = buy_count     # product's buy counts
+        self.sum_of_ratings: int = sum_of_rating  # product's sum of all rates
+        self.average_rating: float = h.get_average(self.sum_of_ratings, self.buy_count)  # product's average rating
+        self.feedbacks: list[Feedback] = feedbacks   # product's feedbacks
+        self.cost = cost      # product's cost
 
     def update_average_rate(self):
         self.average_rating = h.get_average(self.sum_of_ratings, self.buy_count)

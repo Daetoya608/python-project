@@ -18,9 +18,7 @@ import gui_utils
 def is_correct_input_data(email: str, name: str, password: str):
     check1 = not email.isspace() and not name.isspace() and not password.isspace()
     check2 = email != "" and name != "" and password != ""
-    # check3 = auth.seller_ind(email, name, password) != -1
     return check1 and check2
-
 
 
 class Ui_AuthorizationWindow(object):
@@ -46,9 +44,9 @@ class Ui_AuthorizationWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label_3 = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout.addWidget(self.label_3)
+        self.label__email = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.label__email.setObjectName("label_3")
+        self.horizontalLayout.addWidget(self.label__email)
         self.lineEdit_email = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
         self.lineEdit_email.setObjectName("lineEdit_email")
         self.horizontalLayout.addWidget(self.lineEdit_email)
@@ -58,9 +56,9 @@ class Ui_AuthorizationWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.label_5 = QtWidgets.QLabel(self.verticalLayoutWidget_3)
-        self.label_5.setObjectName("label_5")
-        self.verticalLayout_3.addWidget(self.label_5)
+        self.label__sellerName = QtWidgets.QLabel(self.verticalLayoutWidget_3)
+        self.label__sellerName.setObjectName("label_5")
+        self.verticalLayout_3.addWidget(self.label__sellerName)
         self.lineEdit_name = QtWidgets.QLineEdit(self.verticalLayoutWidget_3)
         self.lineEdit_name.setObjectName("lineEdit_name")
         self.verticalLayout_3.addWidget(self.lineEdit_name)
@@ -76,9 +74,9 @@ class Ui_AuthorizationWindow(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.label_7 = QtWidgets.QLabel(self.horizontalLayoutWidget_3)
-        self.label_7.setObjectName("label_7")
-        self.horizontalLayout_4.addWidget(self.label_7)
+        self.label__Password = QtWidgets.QLabel(self.horizontalLayoutWidget_3)
+        self.label__Password.setObjectName("label_7")
+        self.horizontalLayout_4.addWidget(self.label__Password)
         self.lineEdit_password = QtWidgets.QLineEdit(self.horizontalLayoutWidget_3)
         self.lineEdit_password.setObjectName("lineEdit_password")
         self.horizontalLayout_4.addWidget(self.lineEdit_password)
@@ -98,10 +96,10 @@ class Ui_AuthorizationWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Scamberries - Авторизация"))
         self.text_label_authorization.setText(_translate("MainWindow", "Авторизация"))
-        self.label_3.setText(_translate("MainWindow", "email:"))
-        self.label_5.setText(_translate("MainWindow", "Ник / Назавние магазина:"))
+        self.label__email.setText(_translate("MainWindow", "email:"))
+        self.label__sellerName.setText(_translate("MainWindow", "Ник / Назавние магазина:"))
         self.pushButton_authoriz.setText(_translate("MainWindow", "Войти в аккаунт"))
-        self.label_7.setText(_translate("MainWindow", "password:"))
+        self.label__Password.setText(_translate("MainWindow", "password:"))
 
     def handle_authorize(self):
         import app.services.registration as reg
@@ -110,16 +108,15 @@ class Ui_AuthorizationWindow(object):
         password: str = self.lineEdit_password.text()
         if not is_correct_input_data(email, name, password):
             return
-        seller_index = auth.seller_ind(email, name, password)
-        if seller_index != -1:
+        seller_index = auth.find_seller_index(email, name, password)
+        if seller_index:
             from seller_mode_window import Ui_SellerModeWindow
             mainwindow.current_seller_account_ind = seller_index
             tel_num = reg.registered_sellers[seller_index].phone_num
             gui_utils.change_window(Ui_SellerModeWindow(), name, email, tel_num)
 
-        buyer_index = auth.buyer_ind(email, name, password)
-        if buyer_index != -1:
+        buyer_index = auth.find_buyer_index(email, name, password)
+        if buyer_index:
             from buyer_mode_window import Ui_BuyerModeWindow
             mainwindow.current_buyer_account_ind = buyer_index
-            tel_num = reg.registered_buyers[buyer_index].phone_num
             gui_utils.change_window(Ui_BuyerModeWindow())
