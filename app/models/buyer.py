@@ -1,0 +1,26 @@
+from app.models.feedback import Feedback
+from app.models.extra_models import Shopping_cart, Bought_products
+from app.models.base_account import BaseAccount
+from app.models.product_card import ProductCard
+
+
+class Buyer(BaseAccount):
+    def __init__(self, email: str, phone_num: str, user_name: str, password: str):
+        super().__init__(email, phone_num, password)
+        self.user_name: str = user_name
+        self.shopping_cart: Shopping_cart = Shopping_cart([])
+        self.bought_products: Bought_products = Bought_products([])
+
+    def add_card_to_cart(self, product_card):
+        self.shopping_cart.add_product_card(product_card)
+
+    def buy_products_from_cart(self):
+        self.bought_products.bought_products.extend(self.shopping_cart.product_card_list)
+        self.shopping_cart.product_card_list.clear()
+
+    def buy_product(self, product_card: ProductCard):
+        self.bought_products.bought_products.append(product_card)
+
+    def leave_feedback(self, product_card: ProductCard, feedback: Feedback):
+        product_card.feedbacks.append(feedback)
+
