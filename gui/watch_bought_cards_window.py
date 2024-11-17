@@ -127,7 +127,7 @@ class Ui_WatchBoughtCardsWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Scamberries - Купленные товары"))
         self.pushButton_Exit.setText(_translate("MainWindow", "Exit"))
         self.pushButton_Home.setText(_translate("MainWindow", "Home"))
         self.label_2.setText(_translate("MainWindow", "Название товара:"))
@@ -210,5 +210,6 @@ class Ui_WatchBoughtCardsWindow(object):
         from add_feedback_window import Ui_AddFeedbackWindow
 
         gui_utils.change_window(Ui_AddFeedbackWindow(), self.current_seller, self.current_card_ind, self.current_bought_card_ind)
+
 
     # обработчик отзывов

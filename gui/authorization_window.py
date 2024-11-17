@@ -96,7 +96,7 @@ class Ui_AuthorizationWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "RegistrationWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Scamberries - Авторизация"))
         self.text_label_authorization.setText(_translate("MainWindow", "Авторизация"))
         self.label_3.setText(_translate("MainWindow", "email:"))
         self.label_5.setText(_translate("MainWindow", "Ник / Назавние магазина:"))

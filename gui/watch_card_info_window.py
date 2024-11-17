@@ -122,7 +122,7 @@ class Ui_WatchCardsWindowSeller(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Scamberries - Просмотр товаров"))
         self.pushButton_Exit.setText(_translate("MainWindow", "Exit"))
         self.pushButton_Home.setText(_translate("MainWindow", "Home"))
         self.label_2.setText(_translate("MainWindow", "Название товара:"))

@@ -144,7 +144,7 @@ class Ui_RegistrationWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "RegistrationWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Scamberries - Регистрация"))
         self.text_label_registration.setText(_translate("MainWindow", "Регистрация"))
         self.label_2.setText(_translate("MainWindow", "Ваша роль:"))
         self.radioButton_is_buyer.setText(_translate("MainWindow", "Покупатель"))
